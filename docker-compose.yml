@@ -1,0 +1,28 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend
+    container_name: emp_backend
+    restart: unless-stopped
+    environment:
+      PORT: 5000
+      MONGODB_URI: mongodb://antonjohnsansabesan2_db_user:r4LZCdlrrQ9wxZZg@ac-j73b0qp-shard-00-00.f300voq.mongodb.net:27017,ac-j73b0qp-shard-00-01.f300voq.mongodb.net:27017,ac-j73b0qp-shard-00-02.f300voq.mongodb.net:27017/employeedb?ssl=true&replicaSet=atlas-11fue8-shard-0&authSource=admin&appName=Cluster0
+      SESSION_SECRET: mysecretkey123
+    networks:
+      - emp_network
+
+  frontend:
+    build: ./frontend
+    container_name: emp_frontend
+    restart: unless-stopped
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - emp_network
+
+networks:
+  emp_network:
+    driver: bridge
